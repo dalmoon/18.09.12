@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.mapper.UserMap">
+
+	<resultMap id="userMap" type="com.test.dto.UserVO">
+		<result property="id" column="id" />
+		<result property="pw" column="pw" />
+		<result property="name" column="name" />
+		<result property="insdate" column="insdate" />
+		<result property="useyn" column="useyn" />
+	</resultMap>
+	
+	
+	<select id="userlogin" parameterType="com.test.dto.UserVO"
+ 						resultType="com.test.dto.UserVO">
+ 		select * 
+ 		from userinfo 
+ 		where id=#{id} and pw=#{pw}
+ 	</select>
+ 	
+ 	<select id="idck" parameterType="string" resultType="com.test.dto.UserVO">
+ 		select *
+ 		from userinfo
+ 		where id=#{id}
+ 	</select>
+	
+</mapper>
