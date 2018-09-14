@@ -54,7 +54,7 @@ function checkPwd(){
 <tr>
 	<td align = "center">아이디 : </td>
 	<td><input type="text" id="id" name="id" size="17" placeholder="아이디를 입력하세요.">
-	<a href="#none" onclick="confirmId()"><img src="http://img.echosting.cafe24.com/skin/base_ko_KR/member/btn_check2.gif" alt="중복확인" /></a>
+	<input type="button" onclick="confirmId()" value="중복확인">
 	<br><span id = "chkMsg"></span>
 	</td>
 </tr>
