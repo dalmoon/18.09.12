@@ -4,6 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
 @Repository
@@ -18,5 +19,13 @@ public class UserDAO {
 	
 	public UserVO getidck(String id) {
 		return mybatis.selectOne("User.getIdck", id);
+	}
+	
+	public int getinsert(JoinVO vo) {
+		return mybatis.insert("User.getInsert", vo);
+	}
+	
+	public int getDuplChk(String id) {
+		return mybatis.selectOne("User.getDuplChk", id);
 	}
 }

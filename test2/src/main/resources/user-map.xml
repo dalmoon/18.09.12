@@ -17,5 +17,13 @@
  		from userinfo
  		where id=#{id}
  	</select>
+ 	
+ 	<select id="getInsert" parameterType="com.test.dvo.UserVO">
+ 		insert into userinfo(id, pw, name, insdate, useyn)
+		values(#{id},#{pw},#{name},SYSDATE,#{useyn})
+ 	</select>
 	
+	<select id = "getDuplChk" parameterType="string" resultType="int">
+    	SELECT COUNT(*) FROM userinfo WHERE id = #{id}
+	</select>
 </mapper>

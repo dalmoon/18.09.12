@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 import com.test.service.UserService;
 
@@ -42,5 +44,20 @@ public class UserController {
 			a.sa(res, "존재하지 않는 아이디입니다.");
 		}
 		return "login";
+	}
+	
+	@RequestMapping(value = "join.do")
+	public String userinsert(JoinVO vo) throws Exception {
+		
+		logger.debug("---->>>>> 회원가입 동작");
+		
+		userService.uinsert(vo);
+		return "detail";
+	}
+	
+	@RequestMapping(value = "/idDuplChk.do")
+	public @ResponseBody String idDuplChk(UserVO vo) throws Exception{
+	    int result = userService.idDuplChk(vo.getId());
+	    return String.valueOf(result);
 	}
 }
