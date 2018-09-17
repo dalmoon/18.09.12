@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>리스트</title>
+<title>리스트~</title>
 </head>
 <body>
 <table border="1" cellpadding="0" cellspacing="0" width="700">
