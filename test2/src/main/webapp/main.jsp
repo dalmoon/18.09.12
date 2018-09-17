@@ -7,6 +7,6 @@
 <title>메인페이지</title>
 </head>
 <body>
-${userId}님 환영합니다.
+${uname}님 환영합니다.
 </body>
 </html>

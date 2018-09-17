@@ -1,9 +1,13 @@
 package com.test.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.test.dvo.CodemngVO;
+import com.test.dvo.DetailVO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
@@ -27,5 +31,13 @@ public class UserDAO {
 	
 	public int getDuplChk(String id) {
 		return mybatis.selectOne("User.getDuplChk", id);
+	}
+
+	public int gdetail(DetailVO vo) {
+		return mybatis.insert("User.getdetail", vo);
+	}
+
+	public List<CodemngVO> glist(CodemngVO vo) {
+		return mybatis.selectList("User.getlist", vo);
 	}
 }
