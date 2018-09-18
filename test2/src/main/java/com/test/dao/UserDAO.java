@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.JoinVO;
@@ -39,5 +40,13 @@ public class UserDAO {
 
 	public List<CodemngVO> glist(CodemngVO vo) {
 		return mybatis.selectList("User.getlist", vo);
+	}
+
+	public CodemngVO gglist(CodemngVO vo) {
+		return mybatis.selectOne("User.ggetlist", vo);
+	}
+
+	public int update(CCodemngVO vo) {
+		return mybatis.update("User.update", vo);
 	}
 }

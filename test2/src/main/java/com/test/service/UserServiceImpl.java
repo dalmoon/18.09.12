@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.test.dao.UserDAO;
+import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.JoinVO;
@@ -45,6 +46,16 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<CodemngVO> ulist(CodemngVO vo) throws Exception {
 		return userDAO.glist(vo);
+	}
+
+	@Override
+	public CodemngVO uulist(CodemngVO vo) throws Exception {
+		return userDAO.gglist(vo);
+	}
+
+	@Override
+	public int update(CCodemngVO vo) throws Exception {
+		return userDAO.update(vo);
 	}
 	
 }

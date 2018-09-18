@@ -11,18 +11,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 import com.test.service.UserService;
 
-import oracle.net.aso.a;
-
 @Controller
+@SessionAttributes({"ulist", "uulist"})
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListController.class);
@@ -91,4 +93,26 @@ public class UserController {
 			model.addAttribute("ulist", list);
 		return "ulist";
 	}
+	
+	/*@RequestMapping(value = "uulist.do")
+	public String uulist(Model model, HttpServletRequest req) throws Exception {
+		String cdno = req.getParameter("cdno");
+		CodemngVO list = userService.uulist(cdno);
+		model.addAttribute("uulist", list);
+		return "ulist";
+	}*/
+	
+	@RequestMapping(value = "uulist.do")
+	public String uulist(CodemngVO vo, Model model) throws Exception {
+		CodemngVO list = userService.uulist(vo);
+		model.addAttribute("uulist", list);
+		return "ulist";
+	}
+	
+	@RequestMapping(value = "update.do")
+	public String update(@ModelAttribute("uulist") CCodemngVO vo) throws Exception{
+		userService.update(vo);
+		return "ulist";
+	}
+	
 }
