@@ -1,5 +1,10 @@
 package com.test.board;
 
+import java.io.PrintWriter;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +24,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
+import com.test.dvo.ItVO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 import com.test.service.UserService;
 
+import net.minidev.json.JSONArray;
+
 @Controller
-@SessionAttributes({"ulist", "uulist"})
+@SessionAttributes({"uulist", "itemlist"})
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListController.class);
@@ -103,16 +111,125 @@ public class UserController {
 	}*/
 	
 	@RequestMapping(value = "uulist.do")
-	public String uulist(CodemngVO vo, Model model) throws Exception {
+	public String uulist(CodemngVO vo, Model model, HttpSession hp) throws Exception {
 		CodemngVO list = userService.uulist(vo);
-		model.addAttribute("uulist", list);
+		hp.setAttribute("hplist", list);
+		hp.setAttribute("hplist1", list);
 		return "ulist";
 	}
 	
 	@RequestMapping(value = "update.do")
-	public String update(@ModelAttribute("uulist") CCodemngVO vo) throws Exception{
+	public String update(@ModelAttribute("uulist") CodemngVO vo) throws Exception{
 		userService.update(vo);
+		return "redirect:ulist.do";
+	}
+	
+	@RequestMapping(value = "insert.do")
+	public String insert(@ModelAttribute("uulist") CodemngVO vo, Model model) throws Exception {
+		Date from = new Date();
+		SimpleDateFormat transFormat = new SimpleDateFormat("yy-MM-dd");
+		String to = transFormat.format(from);
+		vo.setInsdate(to);
+		String a = vo.getInsdate();
+		model.addAttribute("a", a);
+		System.out.println(a);
+		userService.insert(vo);
+		return "redirect:ulist.do";
+	}
+	
+	@RequestMapping(value = "iselect.do")
+	public String iselect(@ModelAttribute("uulist") CodemngVO vo) throws Exception {
+		userService.iselect(vo);
 		return "ulist";
+	}
+	
+	@RequestMapping(value = "in.do")
+	public String log(HttpSession ht, HttpServletRequest req, Model model, CodemngVO vo)throws Exception{
+		 vo = (CodemngVO) ht.getAttribute("hplist1");
+		CodemngVO list = userService.uulist(vo);
+		ht.setAttribute("hplist", list);
+		model.addAttribute("uulist", list);
+		String a = 	vo.getCdno();
+		System.out.println(a);
+		/*ht.removeAttribute("uulist");*/
+		return "redirect:ulist.jsp";
+	}
+	
+	@RequestMapping(value = "logout.do")
+	public String logout(CodemngVO vo, HttpSession ht, HttpServletRequest req)throws Exception{
+		ht.removeAttribute("hplist");
+		return "redirect:ulist.jsp";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "fulllist.do")
+	public String itlist(ItVO vo, Model model, HttpSession hp)throws Exception{
+		List<ItVO> list = userService.itlist(vo);
+		model.addAttribute("itemlist", list);
+		return "fulllist";
+	}
+	
+	@RequestMapping(value = "itselect.do")
+	public String ittlist(ItVO vo, Model model, HttpSession hp) throws Exception {
+		ItVO list = userService.ittlist(vo);
+		hp.setAttribute("ithplist", list);
+		hp.setAttribute("ithplist1", list);
+		return "redirect:fulllist.do";
+	}
+	
+	@RequestMapping(value = "itlogout.do")
+	public String logoutt(ItVO vo, HttpSession ht, HttpServletRequest req)throws Exception{
+		ht.removeAttribute("ithplist");
+		return "redirect:fulllist.do";
+	}
+	
+	@RequestMapping(value = "itin.do")
+	public String log(HttpSession ht, HttpServletRequest req, Model model, ItVO vo)throws Exception{
+		 vo = (ItVO) ht.getAttribute("ithplist1");
+		 ItVO list = userService.ituulist(vo);
+		ht.setAttribute("ithplist", list);
+		/*ht.removeAttribute("uulist");*/
+		return "redirect:fulllist.do";
+	}
+	
+	@RequestMapping("testSelect.do")
+	public void selectAjax(ItVO vo, HttpServletRequest req, HttpServletResponse res, String param) { 
+	   try {
+	   // 도 정보 받음
+		   String a = vo.getItemclsname();
+		   String province = a;
+		   String b = vo.geti
+	 
+	   // 알맞은 동적 select box info 생성
+	   List<String> cityList = new ArrayList();
+	   
+	   
+	   if (province.equals("")) {
+	      cityList.add("");
+	      cityList.add("");
+	   } else if (province.equals("")) {
+	      cityList.add("");
+	      cityList.add("");
+	   }
+	 
+	   // jsonArray에 추가
+	   JSONArray jsonArray = new JSONArray();
+	   for (int i = 0; i < cityList.size(); i++) {
+	      jsonArray.add(cityList.get(i));
+	   }
+	 
+	   // jsonArray 넘김
+	   PrintWriter pw = res.getWriter();
+	   pw.print(jsonArray.toString());
+	   pw.flush();
+	   pw.close();
+	 
+	   } catch (Exception e) {
+	       System.out.println("Controller error");
+	   }
 	}
 	
 }

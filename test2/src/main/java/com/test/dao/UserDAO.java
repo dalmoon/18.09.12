@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
+import com.test.dvo.ItVO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
@@ -46,7 +47,28 @@ public class UserDAO {
 		return mybatis.selectOne("User.ggetlist", vo);
 	}
 
-	public int update(CCodemngVO vo) {
+	public int update(CodemngVO vo) {
 		return mybatis.update("User.update", vo);
 	}
+
+	public int insert(CodemngVO vo) {
+		return mybatis.insert("User.insert", vo);
+	}
+
+	public CodemngVO iselect(CodemngVO vo) {
+		return mybatis.selectOne("User.iselect", vo);
+	}
+
+	public List<ItVO> itlist(ItVO vo) {
+		return mybatis.selectList("User.itselect", vo);
+	}
+
+	public ItVO ittlist(ItVO vo) {
+		return mybatis.selectOne("User.ittselect", vo);
+	}
+
+	public ItVO ituulist(ItVO vo) {
+		return mybatis.selectOne("User.ittselect", vo);
+	}
+
 }

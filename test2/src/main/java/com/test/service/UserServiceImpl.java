@@ -9,6 +9,7 @@ import com.test.dao.UserDAO;
 import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
+import com.test.dvo.ItVO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
@@ -54,8 +55,34 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int update(CCodemngVO vo) throws Exception {
+	public int update(CodemngVO vo) throws Exception {
 		return userDAO.update(vo);
 	}
+
+	@Override
+	public int insert(CodemngVO vo) throws Exception {
+		return userDAO.insert(vo);
+	}
+
+	@Override
+	public CodemngVO iselect(CodemngVO vo) throws Exception {
+		return userDAO.iselect(vo);
+	}
+
+	@Override
+	public List<ItVO> itlist(ItVO vo) throws Exception {
+		return userDAO.itlist(vo);
+	}
+
+	@Override
+	public ItVO ittlist(ItVO vo) throws Exception {
+		return userDAO.ittlist(vo);
+	}
+
+	@Override
+	public ItVO ituulist(ItVO vo) throws Exception {
+		return userDAO.ituulist(vo);
+	}
+
 	
 }
