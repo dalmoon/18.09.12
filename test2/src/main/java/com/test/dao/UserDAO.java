@@ -80,6 +80,10 @@ public class UserDAO {
 		return mybatis.selectList("User.search", map);
 	}
 
+	public List<ItVO> fufulllist2list(ItVO vo) {
+		return mybatis.selectList("User.fulllist2list", vo);
+	}
+
 
 
 }

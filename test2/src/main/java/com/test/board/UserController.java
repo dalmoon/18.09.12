@@ -234,4 +234,17 @@ public class UserController {
 
 		return "fulllist";
 	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "fulllist2.do")
+	public String fulllist2list(ItVO vo, Model model)throws Exception{
+		List<ItVO> list = userService.fulllist2list(vo);
+		model.addAttribute("itemlist2", list);
+		return "fulllist2";
+	}
+	
+	
 }

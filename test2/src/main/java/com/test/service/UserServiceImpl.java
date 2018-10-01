@@ -95,6 +95,11 @@ public class UserServiceImpl implements UserService{
 		return userDAO.search(map);
 	}
 
+	@Override
+	public List<ItVO> fulllist2list(ItVO vo) throws Exception {
+		return userDAO.fufulllist2list(vo);
+	}
+
 
 
 	

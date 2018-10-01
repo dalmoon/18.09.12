@@ -27,4 +27,5 @@ public interface UserService {
 	public ItVO ituulist(ItVO vo) throws Exception;
 	public List<ItVO> iitlist(String project) throws Exception;
 	public List<ItVO> search(HashMap<String, Object> map) throws Exception;
+	public List<ItVO> fulllist2list(ItVO vo) throws Exception;
 }
