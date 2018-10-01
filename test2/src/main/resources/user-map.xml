@@ -99,7 +99,7 @@
 	</select>
 	
 	<select id="ittselect" parameterType="com.test.dvo.ItVO" resultType="com.test.dvo.ItVO">
-		select
+		select distinct
     		itemcd,
     		itemname,
     		madenmcd,
@@ -118,6 +118,34 @@
     		where itemcd = #{itemcd}
 	</select>
 	
+	<select id="iitlist" resultType="com.test.dvo.ItVO">
+		select distinct
+    		itemname
+		from
+    		itemlist
+    		where (select cdname from codemng where cdno in (select upcd from codemng where cdno = itemclscd)) = #{itemcd}
+	</select>
+	
+	<select id="search" parameterType="hashmap" resultType="com.test.dvo.ItVO">
+		select
+    		itemcd,
+    		itemname,
+    		madenmcd,
+    		(select cdname from codemng where cdno=madenmcd) as madename,
+    		itemunitcd,
+    		(select cdname from codemng where cdno=itemunitcd) as itemunitname,
+    		stockamt,
+    		stockyn,
+    		insuser,
+    		insdate,
+    		useyn,
+    		itemclscd,
+    		(select cdname from codemng where cdno in (select upcd from codemng where cdno = itemclscd)) as itemclsname
+		from
+    		itemlist
+            where (select cdname from codemng where cdno in (select upcd from codemng where cdno = itemclscd)) = #{producta}
+            and itemname = #{suba}
+	</select>
 	
 	<!-- <insert id="getdetail" parameterType="com.test.dvo.DetailVO">
 		insert into userinfodetail(id, userinfodetailcd, relcd, addrcd, addrname, mobiletelno, hometelno, insuser, insdate, useyn, delivname)

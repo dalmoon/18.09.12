@@ -1,5 +1,6 @@
 package com.test.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -70,5 +71,15 @@ public class UserDAO {
 	public ItVO ituulist(ItVO vo) {
 		return mybatis.selectOne("User.ittselect", vo);
 	}
+
+	public List<ItVO> iitlist(String project) {
+		return mybatis.selectList("User.iitlist", project);
+	}
+
+	public List<ItVO> search(HashMap<String, Object> map) {
+		return mybatis.selectList("User.search", map);
+	}
+
+
 
 }

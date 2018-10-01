@@ -20,42 +20,30 @@
 	</select></td>
 <tbody id="tbody"> --%>
 
-<div class="tester">
- <table>
-  <tbody>
-   <tr>
-    <th scope="row">
-     <div>전체리스트</div>
-    </th>
-   </tr>
-   <td>
-    <select id="province" name="province" onchange="citySelect(this.value);">
-		<c:forEach var="code" items="${itemlist}" varStatus="status2">
+
+<td align="center">카테고리 : </td>
+		<select name="product" id="product">
+			<c:forEach var="code" items="${itemlist}" varStatus="status2">
 			<option value="<c:out value="${code.itemclsname }" />" 
 				<c:if test="${ithplist.itemclsname == code.itemclsname }">selected="selected"</c:if>>
 				<c:out value="${code.itemclsname }" />
 			</option>
-		</c:forEach>
-	</select>
-              
-    <select id="city" name="city">
-    <option value="">전체</option>
-    </select>                                   
-   </td>
-  </tbody>
- </table>
-</div>
-
-</tbody>	
+		</c:forEach>	
+		</select>
+	
 <td align="center">1차분류 : </td>
-	<td><select id="dsrch_corp_cd" name="srch_corp_cd"  >
-		<c:forEach var="code" items="${itemlist}" varStatus="status2">
-			<option value="<c:out value="${code.itemname }" />" 
-				<c:if test="${ithplist.itemname == code.itemname }">selected="selected"</c:if>>
-				<c:out value="${code.itemname }" />
-			</option>
-		</c:forEach>
-	</select></td>
+		<select name="sub" id="sub">
+			<option>:: 선택 ::</option>
+		</select>
+	
+<form action="search.do" method="post" align="right" id="search" name="search">
+    	<input type="hidden" name="producta" id="producta">
+    	<input type="hidden" name="suba" id="suba"> 
+    	<input type="submit" value="조회">
+  	 </form>
+
+ 
+
 <table border="1" cellpadding="0" cellspacing="0" width="700">
 
 <thead>
@@ -74,7 +62,7 @@
 <tbody>
 	<c:forEach items="${itemlist}" var="board">
 		<tr>
-			<td id="aa">${board.itemcd}</td>
+			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemcd}</td>
 			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemname}</td>
 			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.madenmcd}</td>
 			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.madename}</td>
@@ -230,30 +218,56 @@ $(document).ready(function() {
 
 });
 
-function citySelect(province){
-	$.ajax({
-	 type: "POST",
-	 url: "testSelect.do",
-	 dataType:"json",
-	 data: {param:province},
-	 success: function(result){
 
-	  //SELECT BOX 초기화           
-	  $("#city").find("option").remove().end().append("<option value=''>전체</option>");
-	  
-	  //배열 개수 만큼 option 추가
-	   $.each(result, function(i){
-	    $("#city").append("<option value='"+result[i]+"'>"+result[i]+"</option>")
-	   });    
-	  },
-	   error: function (jqXHR, textStatus, errorThrown) {
-	   alert("오류가 발생하였습니다.");
-	  }                     
-	 });
-	}
+$(function() {
+	var select = "<option>:: 선택 ::</option>"; 
+	$("#product").change(function() {			
+		if($("#product").val() == "") { // select의 value가 ""이면, "선택" 메뉴만 보여줌.
+			$("#sub").find("option").remove().end().append(select);
+		} else {
+			comboChange($(this).val());
+		}
+	});
 
 
+	function comboChange() {
+		$.ajax({
+			type:"post",
+			url:"test.do",
+			datatype: "json",
+			data: $("#product"),
+			success: function(data) {
+				/* alert(JSON.stringify(data)); */
+				if(data.length > 0) {
+					$("#sub").find("option").remove().end().append(select);
+					$.each(data, function(key, value) {
+						$("#sub").append("<option>" + value.itemname + "</option>"); 
+					});
+				} else {
+					$("#sub").find("option").remove().end().append("<option>-- No sub --</option>");
+					return;
+				}
+			},
+			error: function(x, o, e) {
+				var msg = "페이지 호출 중 에러 발생 \n" + x.status + " : " + o + " : " + e; 
+				alert(msg);
+			}				
+		});
+	}	
+});
 
+ $("#search").click(function(){
+	var product = $("#product option:selected").val();
+	var sub = $("#sub option:selected").val();
+	$('#producta').val(product);
+	$('#suba').val(sub);
+}); 
+/* $(document).ready(function() {
+	var product = $("#product option:selected").val();
+	var sub = $("#sub option:selected").val();
+	$('#producta').val(product);
+	$('#suba').val(sub);
+}); */
 </script>
 </body>
 </html>

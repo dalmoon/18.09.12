@@ -1,5 +1,6 @@
 package com.test.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.test.dvo.CCodemngVO;
@@ -24,4 +25,6 @@ public interface UserService {
 	public List<ItVO> itlist(ItVO vo) throws Exception;
 	public ItVO ittlist(ItVO vo) throws Exception;
 	public ItVO ituulist(ItVO vo) throws Exception;
+	public List<ItVO> iitlist(String project) throws Exception;
+	public List<ItVO> search(HashMap<String, Object> map) throws Exception;
 }

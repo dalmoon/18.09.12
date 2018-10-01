@@ -5,7 +5,9 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +16,14 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -32,7 +38,7 @@ import com.test.service.UserService;
 import net.minidev.json.JSONArray;
 
 @Controller
-@SessionAttributes({"uulist", "itemlist"})
+@SessionAttributes({"uulist", "ithplist"})
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListController.class);
@@ -195,41 +201,37 @@ public class UserController {
 		return "redirect:fulllist.do";
 	}
 	
-	@RequestMapping("testSelect.do")
-	public void selectAjax(ItVO vo, HttpServletRequest req, HttpServletResponse res, String param) { 
-	   try {
-	   // 도 정보 받음
-		   String a = vo.getItemclsname();
-		   String province = a;
-		   String b = vo.geti
-	 
-	   // 알맞은 동적 select box info 생성
-	   List<String> cityList = new ArrayList();
-	   
-	   
-	   if (province.equals("")) {
-	      cityList.add("");
-	      cityList.add("");
-	   } else if (province.equals("")) {
-	      cityList.add("");
-	      cityList.add("");
-	   }
-	 
-	   // jsonArray에 추가
-	   JSONArray jsonArray = new JSONArray();
-	   for (int i = 0; i < cityList.size(); i++) {
-	      jsonArray.add(cityList.get(i));
-	   }
-	 
-	   // jsonArray 넘김
-	   PrintWriter pw = res.getWriter();
-	   pw.print(jsonArray.toString());
-	   pw.flush();
-	   pw.close();
-	 
-	   } catch (Exception e) {
-	       System.out.println("Controller error");
-	   }
+	@RequestMapping(value="test.do")
+	@ResponseBody
+	public ResponseEntity<List<ItVO>> ajaxProject(String product) throws Exception {
+		ResponseEntity<List<ItVO>> entity =null;
+		System.out.println("이게 본값"+product);
+		try{
+			List<ItVO> list=userService.iitlist(product);
+			System.out.println(list);
+			entity =new ResponseEntity<List<ItVO>>(list, HttpStatus.OK);
+		}catch(Exception e){
+			e.printStackTrace();
+			//에러일 경우 에러 코드 전송 400
+		}
+		
+		return entity;
+		
+		//chrome-extension://aejoelaoggembcahagimdiliamlcdmfm/restlet_client.html
+		// 위주소에서 데이터가 Json 형태로 던져 주는지 확인 해보세요. 사용방법은 구글 검색
 	}
 	
+	@RequestMapping(value = "search.do")
+	public String search(@RequestParam(value = "producta") String producta, @RequestParam(value = "suba") String suba, HttpSession ht, Model model) throws Exception{
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("producta", producta);
+		map.put("suba", suba);
+		List<ItVO> search = userService.search(map);
+		ht.removeAttribute("itemlist");
+		model.addAttribute("itemlist", search);
+
+
+		return "fulllist";
+	}
 }

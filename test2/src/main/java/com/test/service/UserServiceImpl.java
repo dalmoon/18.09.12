@@ -1,5 +1,6 @@
 package com.test.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,18 @@ public class UserServiceImpl implements UserService{
 	public ItVO ituulist(ItVO vo) throws Exception {
 		return userDAO.ituulist(vo);
 	}
+
+	@Override
+	public List<ItVO> iitlist(String project) throws Exception {
+		return userDAO.iitlist(project);
+	}
+
+	@Override
+	public List<ItVO> search(HashMap<String, Object> map) throws Exception {
+		return userDAO.search(map);
+	}
+
+
 
 	
 }
