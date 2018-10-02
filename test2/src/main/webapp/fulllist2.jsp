@@ -20,7 +20,7 @@
 	</select></td>
 <tbody id="tbody"> --%>
 
-
+<p>전체리스트</p>
 <td align="center">카테고리 : </td>
 		<select name="product" id="product">
 			<c:forEach var="code" items="${itemlist2}" varStatus="status2">
@@ -84,9 +84,11 @@
 			<td onclick="goView('${board.itemcd}')"><input type="checkbox" name="useyn" size="17" value="${board.useyn}" checked="checked"></td> 
 		</tr>
 	</c:forEach>
-</tbody>	
+</tbody>
+	
 <form action="update.do" method="post">
 <table>
+<p>입고내용<p>
 <tr>
 	<td align="center">상품코드 : </td>
 	<td><input type="text" name="itemcd" size="17" id="a" value="${ithplist.itemcd}"/></td>
