@@ -23,7 +23,7 @@
 
 <td align="center">카테고리 : </td>
 		<select name="product" id="product">
-			<c:forEach var="code" items="${itemlist}" varStatus="status2">
+			<c:forEach var="code" items="${itemlist2}" varStatus="status2">
 			<option value="<c:out value="${code.itemclsname }" />" 
 				<c:if test="${ithplist.itemclsname == code.itemclsname }">selected="selected"</c:if>>
 				<c:out value="${code.itemclsname }" />
@@ -39,10 +39,19 @@
 <form action="search.do" method="post" align="right" id="search" name="search">
     	<input type="hidden" name="producta" id="producta">
     	<input type="hidden" name="suba" id="suba"> 
+    	<input type="hidden" name="subaa" id="subaa" value=""> 
     	<input type="submit" value="조회">
   	 </form>
+  	 
+  	 <form action="itselect.do" method="post" align="right">
+    	<input type="hidden" name="abcd" id="abcd">
+    	<input type="submit" value="조회1">
+  	 </form>
 
- 
+
+
+ <input type="button" id="listButton" value="리스트출력" /> <br/> <div id="listDiv"></div>
+
 
 <table border="1" cellpadding="0" cellspacing="0" width="700">
 
@@ -59,20 +68,22 @@
 			<th>사용여부</th>
 	</tr>	
 </thead>
-<tbody id="tbody" value="${itemlist2}">
-	<c:forEach items="${itemlist2}" var="board">
-		<tr>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemcd}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemname}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.madenmcd}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.madename}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemunitcd}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.itemunitname}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'">${board.stockamt}</td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'"><input type="checkbox" name="stockyn" size="17" value="${board.stockyn}" checked="checked"></td>
-			<td onclick="location.href='itselect.do?itemcd=${board.itemcd}'"><input type="checkbox" name="useyn" size="17" value="${board.useyn}" checked="checked"></td>
+
+<tbody id="tbody">
+<input id="tr" name="tr" type="hidden"/>
+	 <c:forEach items="${itemlist2}" var="board">
+		<tr id="ta" name="ta" class="address">
+			<td onclick="goView('${board.itemcd}')">${board.itemcd}</td>
+			<td onclick="goView('${board.itemcd}')">${board.itemname}</td>
+			<td onclick="goView('${board.itemcd}')">${board.madenmcd}</td>
+			<td onclick="goView('${board.itemcd}')">${board.madename}</td>
+			<td onclick="goView('${board.itemcd}')">${board.itemunitcd}</td>
+			<td onclick="goView('${board.itemcd}')">${board.itemunitname}</td>
+			<td onclick="goView('${board.itemcd}')">${board.stockamt}</td>
+			<td onclick="goView('${board.itemcd}')"><input type="checkbox" name="stockyn" size="17" value="${board.stockyn}" checked="checked"></td>
+			<td onclick="goView('${board.itemcd}')"><input type="checkbox" name="useyn" size="17" value="${board.useyn}" checked="checked"></td> 
 		</tr>
-	</c:forEach> 
+	</c:forEach>
 </tbody>	
 <form action="update.do" method="post">
 <table>
@@ -86,8 +97,8 @@
 </tr>
 <tr>
 	<td align="center">제 조 사 : </td>
-	<td><select name="useYn"  >
-		<c:forEach var="code" items="${itemlist}" varStatus="status2">
+	<td><select id="useYn"  >
+		<c:forEach var="code" items="${itemlist2}" varStatus="status2">
 			<option value="<c:out value="${code.madename }" />" 
 				<c:if test="${ithplist.madename == code.madename }">selected="selected"</c:if>>
 				<c:out value="${code.madename }" />
@@ -96,8 +107,8 @@
 	</select></td>
 
 	<td align="center">단 위 명 : </td>
-	<td><select name="useYn"  >
-		<c:forEach var="code" items="${itemlist}" varStatus="status2">
+	<td><select id="useYn1"  >
+		<c:forEach var="code" items="${itemlist2}" varStatus="status2">
 			<option value="<c:out value="${code.itemunitname }" />" 
 				<c:if test="${ithplist.itemunitname == code.itemunitname }">selected="selected"</c:if>>
 				<c:out value="${code.itemunitname }" />
@@ -129,7 +140,7 @@
 
 </table>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript"> 
+<script>
 $("#sitename").click(function(){
 	$.ajax({
         
@@ -262,54 +273,80 @@ $(function() {
 	$('#suba').val(sub);
 }); 
 
-
-
- $(function(){
-	 var dataStr = ""; 	
-	 $.ajax({
-			  type:"post",
-			  url:"fulllist2.do",
-			  /* headers:{
-				  "Content-Type" : "application/json"
-			  }, */ 
-			  //contentType: "application/json; charset=UTF-8",
-			  dataType : "json",
-			  data: dataStr,
-			  success:function(list){
-				  console.log(list);
-				  
-				 //[{"":""}, {"":""}, {"":""}, {"":""}, ]
-				 
+  /* $(function(){ 
+		 $.ajax({ 
+			 type: 'post' , 
+			 url: 'fulllist2.do' ,
+			 dataType : 'json' , 
+			 success: function(data) {
 				 var htmlStr = "";
-				  var htmlSubStr = "";
-				  var usrStr = "";
-				  $.each(list, function(i, vo){
-					  urlStr = vo.filepath + "/" + vo.filename;
-					  console.log(urlStr);
-					  htmlStr += "<tr><td>"+vo.itemcd+"</td>";
-					  htmlStr += "<td>"+vo.itemname+"</td>";
-					  htmlStr += "<td>"+vo.madenmcd+"</td>";
-					  htmlStr += "<td>"+vo.madename+"</td>";
-					  htmlStr += "<tr><td>"+vo.itemunitcd+"</td>";
-					  htmlStr += "<td>"+vo.itemunitname+"</td>";
-					  htmlStr += "<td>"+vo.stockamt+"</td>";
-					  htmlStr += "<td>"+vo.stockyn+"</td>";
-					  htmlStr += "<tr><td>"+vo.useyn+"</td>";
-					  
-					  htmlStr += "<td><a href="+urlStr+">"+vo.filename+" "+vo.filesize+"</a></td>";
-						$.each(vo.boardReplyVOList, function(s, svo){
-					  		htmlSubStr += svo.reply + "<br>"
-					  	}); 
-					  htmlStr += "<td>"+htmlSubStr+"</td>";
-					  htmlStr += "</tr>"	
-					  
+				 var htmlStr1 = "";
+				 $.each(data, function(i, vo){
+					  htmlStr += "<tr><td onclick="+goView(vo.itemcd)+">"+vo.itemcd+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.itemname+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.madenmcd+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.madename+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.itemunitcd+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.itemunitname+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.stockamt+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.stockyn+"</td>";
+					  htmlStr += "<td onclick="+goView(vo.itemcd)+">"+vo.useyn+"</td></tr>";
+				 
 				  });
-				  $("#tbody").html(htmlStr); 
-				  
-			  },  
-			  error:function(){}
-			});
- });
-</script>
+				  $('input[name=abcd1]').attr('value',vo.itemcd); 
+				 $("#tbody").html(htmlStr); 
+					 } 
+		 });	
+		 })  */
+		  function goView(diNo){
+	  	$('#tr').val(diNo);
+	 			/* alert(diNo); 
+				console.error(diNo);  */
+	  	//location.href="itselect.do?itemcd="+diNo;
+	  	var v = {};
+	  	$.ajax({
+			type:"post",
+			url:"itselect.do?itemcd="+diNo,
+			datatype: "json",
+			success: function(data) {
+				 /* alert(data.length); 
+				console.error(data.length);   */
+				$('#a').val(data.itemcd);
+	        	$('#b').val(data.itemname);
+	        	$('#useYn').val(data.madename);
+	        	$('#useYn1').val(data.itemunitname);
+	        	$('#product').val(data.itemclsname);
+	        	$('#sub').val(data.itemname);
+			
+			},
+			error: function(data) {
+				alert("실패"); 
+				console.error("실패");  
+			}				
+		});
+		}	  
+			
+		  /* $(function(){
+			 
+			    $('.address').click(function(){
+			    	var product = $("#hid1").val();
+			    	$.ajax({
+			    		
+						type:"post",
+						url:"itselect.do",
+						datatype: "html",
+						success: function(data) {
+							alert(product); 
+							console.error(product);  
+						},
+						error: function(data) {
+							alert(product); 
+							console.error(product);  
+						}				
+					});
+			    });
+			});  */
+		</script>
+
 </body>
 </html>

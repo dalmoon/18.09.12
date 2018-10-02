@@ -98,7 +98,7 @@
     		itemlist
 	</select>
 	
-	<select id="ittselect" parameterType="com.test.dvo.ItVO" resultType="com.test.dvo.ItVO">
+	<select id="ittselect"  resultType="com.test.dvo.ItVO">
 		select distinct
     		itemcd,
     		itemname,
@@ -147,7 +147,7 @@
             and itemname = #{suba}
 	</select>
 	
-	<select id="fulllist2list" parameterType="com.test.dvo.ItVO" resultType="com.test.dvo.ItVO">
+	<select id="fulllist2list"  resultType="com.test.dvo.ItVO">
 		select
     		itemcd,
     		itemname,

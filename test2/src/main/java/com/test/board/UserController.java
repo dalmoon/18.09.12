@@ -1,13 +1,9 @@
 package com.test.board;
 
-import java.io.PrintWriter;
-import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,12 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.ItVO;
@@ -35,10 +29,8 @@ import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 import com.test.service.UserService;
 
-import net.minidev.json.JSONArray;
-
 @Controller
-@SessionAttributes({"uulist", "ithplist"})
+@SessionAttributes({"uulist"})
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListController.class);
@@ -179,12 +171,21 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "itselect.do")
+	@ResponseBody
+	public ResponseEntity<ItVO> fulllist2list1(ItVO vo, Model model, HttpSession hp)throws Exception{
+		ResponseEntity<ItVO> entity =null;
+		ItVO list = userService.ittlist(vo);
+		entity =new ResponseEntity<ItVO>(list, HttpStatus.OK);
+		return entity;
+	}
+	
+	/*@RequestMapping(value = "itselect.do")
 	public String ittlist(ItVO vo, Model model, HttpSession hp) throws Exception {
 		ItVO list = userService.ittlist(vo);
 		hp.setAttribute("ithplist", list);
 		hp.setAttribute("ithplist1", list);
-		return "redirect:fulllist.do";
-	}
+		return "redirect:fulllist2.jsp";
+	}*/
 	
 	@RequestMapping(value = "itlogout.do")
 	public String logoutt(ItVO vo, HttpSession ht, HttpServletRequest req)throws Exception{
@@ -239,12 +240,22 @@ public class UserController {
 	
 	
 	
-	@RequestMapping(value = "fulllist2.do")
-	public String fulllist2list(ItVO vo, Model model)throws Exception{
+	/*@RequestMapping(value = "fulllist2.do")
+	@ResponseBody
+	public ResponseEntity<List<ItVO>> fulllist2list(ItVO vo, Model model)throws Exception{
+		ResponseEntity<List<ItVO>> entity =null;
 		List<ItVO> list = userService.fulllist2list(vo);
+		model.addAttribute("itemlist2", list);
+		entity =new ResponseEntity<List<ItVO>>(list, HttpStatus.OK);
+		return entity;
+	}*/
+	
+	@RequestMapping(value = "fulllist2.do")
+	public String itlist1(ItVO vo, Model model, HttpSession hp)throws Exception{
+		List<ItVO> list = userService.itlist(vo);
 		model.addAttribute("itemlist2", list);
 		return "fulllist2";
 	}
 	
 	
-}
+	}

@@ -75,10 +75,10 @@ public class UserServiceImpl implements UserService{
 		return userDAO.itlist(vo);
 	}
 
-	@Override
+	/*@Override
 	public ItVO ittlist(ItVO vo) throws Exception {
 		return userDAO.ittlist(vo);
-	}
+	}*/
 
 	@Override
 	public ItVO ituulist(ItVO vo) throws Exception {
@@ -98,6 +98,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<ItVO> fulllist2list(ItVO vo) throws Exception {
 		return userDAO.fufulllist2list(vo);
+	}
+
+
+	@Override
+	public ItVO ittlist(ItVO vo) throws Exception {
+		return  userDAO.ittlist(vo);
 	}
 
 
