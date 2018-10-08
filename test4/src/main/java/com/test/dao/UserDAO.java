@@ -11,6 +11,7 @@ import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.ItVO;
+import com.test.dvo.ItVOO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
@@ -82,6 +83,35 @@ public class UserDAO {
 
 	public List<ItVO> fufulllist2list(ItVO vo) {
 		return mybatis.selectList("User.fulllist2list", vo);
+	}
+
+	public ItVOO itlist2(ItVOO voo) {
+		return mybatis.selectOne("User.itlist2", voo);
+	}
+
+	public int itlogout1(HashMap<String, Object> map) {
+		return mybatis.insert("User.itlogout1", map);
+	}
+
+	public int itlogout2(HashMap<String, Object> map) {
+		return mybatis.insert("User.itlogout2", map);
+	}
+
+	public ItVOO itlogout3(ItVOO vo) {
+		// TODO Auto-generated method stub
+		return mybatis.selectOne("User.itlogout3", vo);
+	}
+
+	public int itin1(HashMap<String, Object> map) {
+		return mybatis.update("User.itin1", map);
+	}
+
+	public ItVO ittlist2(String tr1) {
+		return mybatis.selectOne("User.ittlist2", tr1);
+	}
+
+	public int itin2(HashMap<String, Object> map) {
+		return mybatis.update("User.itin2", map);
 	}
 
 

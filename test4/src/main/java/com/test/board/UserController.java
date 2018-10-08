@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.ItVO;
+import com.test.dvo.ItVOO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 import com.test.service.UserService;
@@ -135,6 +136,19 @@ public class UserController {
 		return "redirect:ulist.do";
 	}
 	
+	/*@RequestMapping(value = "insert2.do")
+	public String insert2(ItVO vo, Model model) throws Exception {
+		Date from = new Date();
+		SimpleDateFormat transFormat = new SimpleDateFormat("yy-MM-dd");
+		String to = transFormat.format(from);
+		vo.setInsdate(to);
+		String a = vo.getInsdate();
+		model.addAttribute("a", a);
+		System.out.println(a);
+		userService.insert(vo);
+		return "redirect:ulist.do";
+	}*/
+	
 	@RequestMapping(value = "iselect.do")
 	public String iselect(@ModelAttribute("uulist") CodemngVO vo) throws Exception {
 		userService.iselect(vo);
@@ -175,6 +189,10 @@ public class UserController {
 	public ResponseEntity<ItVO> fulllist2list1(ItVO vo, Model model, HttpSession hp)throws Exception{
 		ResponseEntity<ItVO> entity =null;
 		ItVO list = userService.ittlist(vo);
+		List<ItVO> list1 = userService.itlist(vo);
+		hp.setAttribute("ithplist", list);
+		hp.setAttribute("ithplist1", list);
+		model.addAttribute("ithplist2", list1);
 		entity =new ResponseEntity<ItVO>(list, HttpStatus.OK);
 		return entity;
 	}
@@ -190,16 +208,59 @@ public class UserController {
 	@RequestMapping(value = "itlogout.do")
 	public String logoutt(ItVO vo, HttpSession ht, HttpServletRequest req)throws Exception{
 		ht.removeAttribute("ithplist");
-		return "redirect:fulllist.do";
+		return "redirect:fulllist2.do";
+	}
+	
+	@RequestMapping(value = "itlogout1.do")
+	public String logoutt1(ItVO vo1, Model model, ItVOO vo, HttpSession ht, HttpServletRequest req, @RequestParam(value = "useyn2") int useyn2, @RequestParam(value = "tr1") String tr1)throws Exception{
+		ItVO list2 = userService.ittlist2(tr1);
+		System.out.println(list2.getStockamt()+"값 찍기");
+		int aa = list2.getStockamt();
+		ht.setAttribute("itlogout3", aa);
+		int bb = aa + useyn2;
+		System.out.println(bb);
+ 		Date from = new Date();
+		SimpleDateFormat transFormat = new SimpleDateFormat("yy/MM/dd");
+		String to = transFormat.format(from);
+		vo.setInsdate(to);
+		String a = vo.getInsdate();
+		System.out.println(a);
+		ht.setAttribute("tr1", tr1);
+		ht.setAttribute("insamt", useyn2);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("useyn2", bb);
+		map.put("tr1", tr1);
+		map.put("a1", a);
+		System.out.println(map+"이게 값");
+		int list = userService.itlogout1(map);
+		int list1 = userService.itlogout2(map);
+		ItVOO test = userService.itlogout3(vo);
+		ht.setAttribute("itlogout2", test);
+		ht.setAttribute("itlogout1", list);
+		return "redirect:fulllist2.do";
+	}
+	
+	@RequestMapping(value = "update1.do")
+	public String logoutt2(@RequestParam(value = "tr2") String tr2, @RequestParam(value = "useyn3") int useyn3, @RequestParam(value = "useyn4") String useyn4, @RequestParam(value = "useyn5") int useyn5)throws Exception{
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("useyn3", useyn3);
+		map.put("useyn4", useyn4);
+		map.put("useyn5", useyn5);
+		map.put("tr2", tr2);
+		userService.itin1(map);
+		userService.itin2(map);
+		return "redirect:fulllist2.do";
 	}
 	
 	@RequestMapping(value = "itin.do")
-	public String log(HttpSession ht, HttpServletRequest req, Model model, ItVO vo)throws Exception{
-		 vo = (ItVO) ht.getAttribute("ithplist1");
-		 ItVO list = userService.ituulist(vo);
-		ht.setAttribute("ithplist", list);
+	@ResponseBody
+	public ResponseEntity<ItVOO> log(@RequestParam(value = "useyn2") String useyn2, HttpSession ht, HttpServletRequest req, Model model, ItVOO vo)throws Exception{
+		System.out.println(useyn2);
+		ResponseEntity<ItVO> entity =null;
+		//userService.itin1(useyn2);
+		entity =new ResponseEntity<ItVO>(HttpStatus.OK);
+		return null;
 		/*ht.removeAttribute("uulist");*/
-		return "redirect:fulllist.do";
 	}
 	
 	@RequestMapping(value="test.do")
@@ -228,12 +289,13 @@ public class UserController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("producta", producta);
 		map.put("suba", suba);
+		System.out.println(map+"이게 값");
 		List<ItVO> search = userService.search(map);
-		ht.removeAttribute("itemlist");
-		model.addAttribute("itemlist", search);
+		ht.removeAttribute("itemlist2");
+		model.addAttribute("itemlist2", search);
 
 
-		return "fulllist";
+		return "fulllist2";
 	}
 	
 	
@@ -251,7 +313,7 @@ public class UserController {
 	}*/
 	
 	@RequestMapping(value = "fulllist2.do")
-	public String itlist1(ItVO vo, Model model, HttpSession hp)throws Exception{
+	public String itlist1(ItVO vo, Model model, HttpSession hp, HttpServletResponse res,  HttpServletRequest req)throws Exception{
 		List<ItVO> list = userService.itlist(vo);
 		model.addAttribute("itemlist2", list);
 		return "fulllist2";

@@ -78,7 +78,7 @@
 <table>
 <tr>
 	<td align="center">상품코드 : </td>
-	<td><input type="text" name="itemcd" size="17" id="a" value="${ithplist.itemcd}"/></td>
+	<td><input type="text" name="itemcd" size="17" id="a" value="${ithplist.itemcd}" disabled="disabled"/></td>
 </tr>
 <tr>
 	<td align="center">상 품 명 : </td>

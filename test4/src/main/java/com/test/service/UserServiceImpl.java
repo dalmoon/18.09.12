@@ -11,6 +11,7 @@ import com.test.dvo.CCodemngVO;
 import com.test.dvo.CodemngVO;
 import com.test.dvo.DetailVO;
 import com.test.dvo.ItVO;
+import com.test.dvo.ItVOO;
 import com.test.dvo.JoinVO;
 import com.test.dvo.UserVO;
 
@@ -104,6 +105,41 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public ItVO ittlist(ItVO vo) throws Exception {
 		return  userDAO.ittlist(vo);
+	}
+
+	@Override
+	public ItVOO itlist2(ItVOO voo) throws Exception {
+		return  userDAO.itlist2(voo);
+	}
+
+	@Override
+	public int itlogout1(HashMap<String, Object> map) throws Exception {
+		return userDAO.itlogout1(map);
+	}
+
+	@Override
+	public int itlogout2(HashMap<String, Object> map) throws Exception {
+		return userDAO.itlogout2(map);
+	}
+
+	@Override
+	public ItVOO itlogout3(ItVOO vo) throws Exception {
+		return userDAO.itlogout3(vo);
+	}
+
+	@Override
+	public int itin1(HashMap<String, Object> map) throws Exception{
+		return userDAO.itin1(map);
+	}
+
+	@Override
+	public ItVO ittlist2(String tr1) throws Exception {
+		return userDAO.ittlist2(tr1);
+	}
+
+	@Override
+	public int itin2(HashMap<String, Object> map) throws Exception {
+		return userDAO.itin2(map);
 	}
 
 

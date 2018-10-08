@@ -98,6 +98,14 @@
     		itemlist
 	</select>
 	
+	<select id="itlist2" parameterType="com.test.dvo.ItVOO" resultType="com.test.dvo.ItVOO">
+		select
+    		*
+		from
+    		INITEMLIST
+    		where itemcd = #{itemcd}
+	</select>
+	
 	<select id="ittselect"  resultType="com.test.dvo.ItVO">
 		select distinct
     		itemcd,
@@ -164,6 +172,64 @@
     		(select cdname from codemng where cdno in (select upcd from codemng where cdno = itemclscd)) as itemclsname
 		from
     		itemlist
+	</select>
+	
+	<insert id="insert2" parameterType="com.test.dvo.ItVO">
+		INSERT INTO itemlist 
+		(itemcd, itemname, madenmcd, cdname, insuser, insdate, useyn)
+		VALUES ((select 'I'||substr('00000'||to_char(max(to_number(replace(nvl(cdno,'0'),'I',''))) + 1),-4,4) cdno from codemng), 
+				#{cdlvl}, 
+				#{upcd}, 
+				#{cdname}, 
+				'admin',
+				#{insdate}, 
+				'Y')
+	</insert>
+	
+	<insert id="itlogout1" parameterType="com.test.dvo.ItVOO">
+		insert into initemlist 
+		(itemcd, insitemlistcd, insamt, insdate, insuser)
+		values (#{tr1}, 
+				(select 'II'||substr('0000000000'||to_char(max(to_number(replace(nvl(insitemlistcd,'0'),'II',''))) + 1),-8,8) insitemlistcd from initemlist), 
+				#{useyn2}, 
+				#{a1}, 
+				'admin')
+	</insert>
+	
+	<update id="itlogout2" parameterType="com.test.dvo.ItVO">
+		UPDATE itemlist SET stockamt = #{useyn2} WHERE itemcd = #{tr1}
+	</update>
+	
+	<update id="itin1" parameterType="hashmap">
+		UPDATE INITEMLIST SET insamt = #{useyn3} WHERE insitemlistcd = #{useyn4}
+	</update>
+	
+	<update id="itin2" parameterType="com.test.dvo.ItVO">
+		UPDATE itemlist SET stockamt = #{useyn3}+#{useyn5} WHERE itemcd = #{tr2}
+	</update>
+	
+	<select id="itlogout3" parameterType="com.test.dvo.ItVOO" resultType="com.test.dvo.ItVOO">
+		select max(insitemlistcd) as insitemlistcd from initemlist
+	</select>
+	
+	<select id="ittlist2" parameterType="com.test.dvo.ItVO" resultType="com.test.dvo.ItVO">
+		select distinct
+    		itemcd,
+    		itemname,
+    		madenmcd,
+    		(select cdname from codemng where cdno=madenmcd) as madename,
+    		itemunitcd,
+    		(select cdname from codemng where cdno=itemunitcd) as itemunitname,
+    		stockamt,
+    		stockyn,
+    		insuser,
+    		insdate,
+    		useyn,
+    		itemclscd,
+    		(select cdname from codemng where cdno in (select upcd from codemng where cdno = itemclscd)) as itemclsname
+		from
+    		itemlist
+    		where itemcd = #{tr1}
 	</select>
 	
 	<!-- <insert id="getdetail" parameterType="com.test.dvo.DetailVO">
